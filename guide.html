@@ -1,0 +1,81 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>5 AI Agents That Gave Me 5+ Hours a Week — The Solo AI Fleet Sprint</title>
+<meta name="description" content="A copy-able 5-agent starter stack from an enterprise automation engineer building a 24/7 AI fleet on nights and lunch breaks."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0b0f;--bg2:#11131a;--line:#23262f;--ink:#e9ecf2;--ink2:#9aa3ب0;--ink2:#9aa3b0;--accent:#5eead4;--accent2:#a78bfa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+header{padding:64px 0 28px;border-bottom:1px solid var(--line)}
+.kick{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2)}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.12;letter-spacing:-.02em;margin:.3em 0 .2em}
+.lede{color:var(--ink2);font-size:18px}
+.intro{padding:34px 0;border-bottom:1px solid var(--line)}
+.intro b{color:var(--ink)}
+.card{padding:26px 0;border-bottom:1px solid var(--line)}
+.ct{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.num{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07110d;font-weight:800;display:flex;align-items:center;justify-content:center}
+.card h3{margin:0;font-size:21px;letter-spacing:-.01em}
+.time{margin-left:auto;color:var(--accent);font-weight:600;font-size:14px}
+.card p{margin:7px 0;color:#c7ccd6}
+.pat{color:#9aa3b0 !important;font-size:15px}
+.diy{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:15px}
+.cta{margin:40px 0 70px;background:linear-gradient(180deg,var(--bg2),var(--bg));border:1px solid var(--line);border-radius:16px;padding:34px}
+.cta h2{margin:.1em 0 .3em;font-size:25px;letter-spacing:-.01em}
+.btn{display:inline-block;margin-top:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07110d;font-weight:800;text-decoration:none;padding:14px 24px;border-radius:10px}
+a{color:var(--accent)}
+</style></head>
+<body><div class="wrap">
+<header>
+<div class="kick">The Solo AI Fleet Sprint · free guide</div>
+<h1>5 AI agents that gave me back 5+ hours a week</h1>
+<p class="lede">A copy-able starter stack from an enterprise automation engineer building a 24/7 AI fleet on nights and lunch breaks.</p>
+</header>
+<div class="intro">
+<p><b>Who this is for:</b> you've got a demanding day job, you use ChatGPT but it doesn't <i>do</i> anything while you're in meetings, and you want to build on the side without quitting, hiring, or babysitting scripts.</p>
+<p>The pattern under all 5 is the same — and it's the thing AI Twitter skips: <b>the magic isn't the model, it's the system around it.</b> Monitoring, self-healing, and discipline are what make an agent run unattended without breaking. Enterprise automation, pointed at your own goals.</p>
+</div>
+<div class="card">
+  <div class="ct"><span class="num">1</span><h3>The Channel Distiller</h3><span class="time">~2 hrs/week back</span></div>
+  <p><b>Replaced:</b> Re-watching long videos to find one thing.</p>
+  <p><b>Does:</b> Ingests an entire channel, pulls every transcript, distills it into one searchable SKILL.md. Ask it a question; it answers from the whole channel.</p>
+  <p class="pat"><b>Pattern:</b> transcript fetch → structured distillation → searchable knowledge file. Fallback chain when captions are blocked (API → browser grab → local whisper).</p>
+  <p class="diy"><b>Build-your-own v1:</b> Pick ONE channel you keep re-watching. List video IDs → fetch transcripts → write each to markdown with title + key takeaways. That's v1.</p>
+</div>
+<div class="card">
+  <div class="ct"><span class="num">2</span><h3>The Signal Scout</h3><span class="time">~1.5 hrs/week back</span></div>
+  <p><b>Replaced:</b> Doomscrolling X 'to stay current.'</p>
+  <p><b>Does:</b> Scrapes a target account daily, transcribes their videos, ranks every post P0–P3 by relevance to YOUR goals — a 5-line digest instead of a feed.</p>
+  <p class="pat"><b>Pattern:</b> scrape → LLM scores each item against your mission → daily ranked digest. The ranking prompt is the whole product.</p>
+  <p class="diy"><b>Build-your-own v1:</b> One handle, 15 latest posts, one LLM call tagging each 'act now / this week / log / ignore.' Read only the top tier.</p>
+</div>
+<div class="card">
+  <div class="ct"><span class="num">3</span><h3>The Discussion Synthesizer</h3><span class="time">~1 hr/week back</span></div>
+  <p><b>Replaced:</b> Reading every thread in your paid community.</p>
+  <p><b>Does:</b> Pulls posts + comments, deep-reads only threads with real debate (≥3 replies), writes a top-5 synthesis: the insight, the pushback, the resolution.</p>
+  <p class="pat"><b>Pattern:</b> scrape posts + comments → filter to substantive threads → per-thread deep-read → ranked synthesis. It refuses to invent discussions on a quiet day.</p>
+  <p class="diy"><b>Build-your-own v1:</b> Export your community feed, filter to high-comment posts, summarize each in 3 bullets (insight / objection / resolution).</p>
+</div>
+<div class="card">
+  <div class="ct"><span class="num">4</span><h3>The Draft Engine</h3><span class="time">~1 hr/week back</span></div>
+  <p><b>Replaced:</b> The blank page.</p>
+  <p><b>Does:</b> Turns each day's ranked signals into 2–3 thread skeletons staged for you to approve, edit, or kill — so you never start from zero.</p>
+  <p class="pat"><b>Pattern:</b> today's top signals → angle selection → outline (not full prose) → staged for human review. It drafts; you decide.</p>
+  <p class="diy"><b>Build-your-own v1:</b> Feed your top 3 signals to an LLM with 'give me 3 thread angles + a 6-tweet outline each.' Edit the best one.</p>
+</div>
+<div class="card">
+  <div class="ct"><span class="num">5</span><h3>The Night Shift</h3><span class="time">the one that makes the other 4 trustworthy</span></div>
+  <p><b>Replaced:</b> Babysitting scripts, wondering if they ran.</p>
+  <p><b>Does:</b> Schedules all the above, watches for SILENT failures (fires on the absence of activity, not just errors), records what shipped, pings you only when a human is truly needed.</p>
+  <p class="pat"><b>Pattern:</b> schedule + staleness watchdog + source-of-truth log + alert-only-on-real-failure. Most automation dies silently; this catches it.</p>
+  <p class="diy"><b>Build-your-own v1:</b> For every agent, add a second job that checks 'did agent X produce fresh output in the last 24h?' If not, alert. That habit is the difference between a demo and a system.</p>
+</div>
+<div class="cta">
+<div class="kick">The meta-lesson</div>
+<h2>None of these needed an ML degree.</h2>
+<p>They needed <b>engineering discipline</b> — the same discipline that makes automation survive in a regulated enterprise, pointed at your goals instead of a corporation's. Five small agents, five hours back, every week, compounding. <b>You can build #1 this weekend.</b></p>
+<p style="margin-top:18px">Want the templates and the "anti-babysitter" patterns that keep these running while you're in meetings? That's what we build together in <b>The Solo AI Fleet Sprint</b> — your first working 24/7 AI agent, built <i>with</i> you in 30 days. Ship-it guaranteed: a working agent live by day 30, or I work with you 1:1 until it is.</p>
+<a class="btn" href="index.html#waitlist">→ Join the founding waitlist</a>
+</div>
+</div></body></html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Solo AI Fleet Sprint — Build an AI employee that works while you sleep</title>
+<meta name="description" content="An enterprise automation engineer's playbook for building your own 24/7 AI agent fleet — no ML degree, no babysitting. Join the founding waitlist." />
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0c10; --bg-2:#0e1117; --panel:#141921; --panel-2:#1a212c;
+    --line:#222b38; --line-2:#2c3645; --ink:#e7ecf3; --ink-2:#9aa7b8; --ink-3:#6b7888;
+    --accent:#5eead4; --accent-2:#38bdf8; --accent-ink:#04221d; --warn:#fbbf24;
+    --maxw:1080px; --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.6;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3{line-height:1.12;letter-spacing:-.02em;font-weight:800}
+  ::selection{background:var(--accent);color:var(--accent-ink)}
+
+  /* background glow */
+  .glow{position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(60rem 40rem at 75% -10%, rgba(94,234,212,.10), transparent 60%),
+      radial-gradient(50rem 40rem at 0% 5%, rgba(56,189,248,.08), transparent 55%);
+  }
+
+  /* nav */
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+    background:rgba(10,12,16,.72);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em}
+  .brand .dot{width:11px;height:11px;border-radius:3px;background:var(--accent);
+    box-shadow:0 0 14px var(--accent);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  .brand small{color:var(--ink-3);font-weight:500}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;cursor:pointer;
+    border-radius:10px;padding:11px 18px;border:1px solid transparent;transition:.18s;font-size:15px}
+  .btn-primary{background:var(--accent);color:var(--accent-ink)}
+  .btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .btn-ghost{border-color:var(--line);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .nav .btn{padding:9px 16px}
+
+  /* hero */
+  .hero{padding:72px 0 56px;text-align:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 15px;margin-bottom:26px}
+  .hero h1{font-size:clamp(40px,7vw,72px);background:linear-gradient(180deg,#fff,#aeb9c8);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p.sub{max-width:680px;margin:22px auto 0;font-size:clamp(17px,2.4vw,20px);color:var(--ink-2)}
+  .hero p.sub b{color:var(--ink);font-weight:600}
+
+  /* capture form */
+  .capture{max-width:520px;margin:34px auto 12px}
+  .capture form{display:flex;gap:10px;background:var(--panel);border:1px solid var(--line);
+    border-radius:14px;padding:8px}
+  .capture input[type=email]{flex:1;background:transparent;border:0;outline:0;color:var(--ink);
+    font-size:16px;padding:10px 12px;font-family:inherit}
+  .capture input::placeholder{color:var(--ink-3)}
+  .capture .btn-primary{white-space:nowrap}
+  .micro{font-size:13.5px;color:var(--ink-3);margin-top:12px}
+  .micro b{color:var(--accent);font-weight:600}
+  .ok-state{display:none;background:var(--panel);border:1px solid var(--accent);
+    border-radius:14px;padding:22px;text-align:center}
+  .ok-state.show{display:block;animation:rise .4s ease}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .ok-state h3{font-size:19px;margin-bottom:6px}
+  .ok-state a{color:var(--accent);font-weight:600;border-bottom:1px solid var(--accent)}
+
+  /* trust row */
+  .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-top:30px;
+    color:var(--ink-3);font-size:13.5px}
+  .trust span{display:inline-flex;align-items:center;gap:7px}
+  .trust .ck{color:var(--accent)}
+
+  /* sections */
+  section{padding:64px 0}
+  .sec-head{text-align:center;max-width:680px;margin:0 auto 44px}
+  .kicker{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2)}
+  .sec-head h2{font-size:clamp(28px,4.4vw,42px);margin-top:12px}
+  .sec-head p{color:var(--ink-2);margin-top:14px;font-size:17px}
+
+  /* problem / promise split */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .pill{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+  .pill h3{font-size:18px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .pill ul{list-style:none;color:var(--ink-2);font-size:15.5px}
+  .pill li{padding:7px 0 7px 26px;position:relative}
+  .pill.bad li::before{content:"✕";position:absolute;left:0;color:#f87171;font-weight:700}
+  .pill.good li::before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:700}
+
+  /* proof band */
+  .proof{background:linear-gradient(180deg,var(--bg-2),var(--bg));border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line)}
+  .proof-in{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+  .proof blockquote{font-size:clamp(20px,3vw,27px);font-weight:600;letter-spacing:-.01em;line-height:1.35}
+  .proof blockquote .hl{color:var(--accent)}
+  .proof .by{margin-top:18px;color:var(--ink-3);font-size:14.5px}
+  .creds{display:grid;gap:12px}
+  .cred{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .cred .t{font-weight:700;font-size:15px}
+  .cred .d{color:var(--ink-2);font-size:14px;margin-top:3px}
+
+  /* agent cards */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;
+    transition:.18s;position:relative;overflow:hidden}
+  .card:hover{border-color:var(--accent);transform:translateY(-3px)}
+  .card .n{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);font-weight:700}
+  .card h3{font-size:18px;margin:10px 0 8px}
+  .card p{color:var(--ink-2);font-size:14.5px}
+  .card .saved{display:inline-block;margin-top:14px;font-size:12.5px;font-weight:600;color:var(--accent);
+    background:rgba(94,234,212,.08);border:1px solid rgba(94,234,212,.25);border-radius:999px;padding:5px 11px}
+  .card.full{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+  .card.full .big{font-family:'JetBrains Mono',monospace;font-size:30px;color:var(--accent);font-weight:700}
+
+  /* offer / value stack */
+  .offer{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:clamp(28px,5vw,52px);
+    display:grid;grid-template-columns:1.15fr 1fr;gap:44px;align-items:start}
+  .offer h2{font-size:clamp(26px,3.6vw,36px)}
+  .offer .lead{color:var(--ink-2);margin:14px 0 24px;font-size:17px}
+  .stack{list-style:none;display:grid;gap:12px}
+  .stack li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;color:var(--ink)}
+  .stack li .ck{color:var(--accent);font-weight:800;flex:none;margin-top:1px}
+  .stack li b{font-weight:600}
+  .guarantee{background:var(--bg-2);border:1px dashed var(--accent);border-radius:14px;padding:22px;margin-top:8px}
+  .guarantee .g-t{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--accent);margin-bottom:8px}
+  .guarantee p{color:var(--ink-2);font-size:15px}
+  .price-note{font-size:14px;color:var(--ink-3);margin-top:18px}
+  .price-note b{color:var(--warn)}
+
+  /* who for */
+  .forwho{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+  /* final cta */
+  .final{text-align:center}
+  .final .box{background:linear-gradient(135deg,var(--panel),var(--panel-2));border:1px solid var(--line);
+    border-radius:22px;padding:clamp(34px,6vw,64px)}
+  .final h2{font-size:clamp(28px,4.6vw,46px)}
+  .final p{color:var(--ink-2);max-width:560px;margin:14px auto 0;font-size:17px}
+
+  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--ink-3);font-size:14px}
+  .foot-in{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center}
+  footer a{color:var(--ink-2)}
+  footer a:hover{color:var(--accent)}
+
+  @media(max-width:860px){
+    .split,.proof-in,.grid,.offer,.forwho{grid-template-columns:1fr}
+    .card.full{grid-template-columns:1fr;text-align:center}
+    .capture form{flex-direction:column}
+    .nav .btn-ghost{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <div class="brand"><span class="dot"></span> Solo AI Fleet <small>/ Sprint</small></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a class="btn btn-ghost" href="#guide">Free guide</a>
+      <a class="btn btn-primary" href="#waitlist">Join the waitlist</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot" style="width:7px;height:7px;border-radius:2px;background:var(--accent)"></span> The Solo AI Fleet Sprint</span>
+    <h1>Stop prompting.<br>Start deploying.</h1>
+    <p class="sub">Build an <b>AI employee that works while you sleep</b> — no ML degree, no babysitting. The playbook from an enterprise automation engineer who built his own 24/7 AI fleet on nights and lunch breaks.</p>
+
+    <div class="capture" id="waitlist">
+      <form id="wl-form" action="mailto:darylnunes@gmail.com" method="POST">
+        <input type="email" name="email" placeholder="you@work.com" required aria-label="Email address" />
+        <button class="btn btn-primary" type="submit">Join the founding waitlist</button>
+      </form>
+      <div class="ok-state" id="wl-ok">
+        <h3>You're on the list. ⚡</h3>
+        <p style="color:var(--ink-2);font-size:15px">Founding members hear first when the cohort opens. While you wait — <a href="guide.html" target="_blank" rel="noopener">grab the free 5-agent guide →</a></p>
+      </div>
+      <p class="micro">Founding-cohort pricing, locked for waitlist members. <b>Free 5-agent starter guide on signup.</b> No spam, unsubscribe anytime.</p>
+    </div>
+
+    <div class="trust">
+      <span><span class="ck">✓</span> Built in a regulated enterprise</span>
+      <span><span class="ck">✓</span> Runs unattended 24/7</span>
+      <span><span class="ck">✓</span> No ML degree required</span>
+      <span><span class="ck">✓</span> Ship-It Guarantee</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM / PROMISE -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">The gap nobody on AI Twitter talks about</div>
+      <h2>Your AI gives you answers. It should give you back your week.</h2>
+      <p>You already use ChatGPT. The problem is it just sits there — it doesn't <i>do</i> anything while you're in meetings. The leap isn't a better prompt. It's a system that runs without you.</p>
+    </div>
+    <div class="split">
+      <div class="pill bad">
+        <h3>🗣️ Prompting</h3>
+        <ul>
+          <li>You open a chat, paste context, copy the answer — every single time</li>
+          <li>Nothing happens while you sleep, work, or live your life</li>
+          <li>One-off outputs you have to babysit and re-trigger</li>
+          <li>Knowledge stays trapped in tabs you'll never reopen</li>
+        </ul>
+      </div>
+      <div class="pill good">
+        <h3>🤖 Deploying</h3>
+        <ul>
+          <li>Agents that run on a schedule and trigger themselves</li>
+          <li>Work gets done overnight — you wake up to the output</li>
+          <li>A watchdog catches silent failures before you do</li>
+          <li>Every input compounds into a searchable, reusable library</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof">
+  <div class="wrap proof-in">
+    <div>
+      <blockquote>The magic was never the model. It's the <span class="hl">engineering discipline</span> around it — the monitoring, the self-healing, the refusal to ship something that breaks the moment you stop watching.</blockquote>
+      <div class="by">— the difference between a demo and a system</div>
+    </div>
+    <div class="creds">
+      <div class="cred"><div class="t">Built in production, not on a whiteboard</div><div class="d">Senior automation engineer in a regulated enterprise — automation that moves real money and survives audits.</div></div>
+      <div class="cred"><div class="t">Same rigor, pointed at my own goals</div><div class="d">I took bank-grade automation discipline and built a personal AI fleet that runs research, content, and ops around the clock.</div></div>
+      <div class="cred"><div class="t">I am my own case study</div><div class="d">Full-time job, family, ~5 hours a week. If it can't run unattended, it doesn't make the cut.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LEAD MAGNET -->
+<section id="guide">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Free — start this weekend</div>
+      <h2>5 AI agents that gave me back 5+ hours a week</h2>
+      <p>The exact starter stack I run — each agent replaced a recurring chunk of my week, and they keep working while I'm in meetings. Get the guide with the build-your-own steps for each.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="n">AGENT 01</div><h3>The Channel Distiller</h3><p>Ingests an entire YouTube channel and turns it into one searchable knowledge file. Ask it anything; it answers from the whole channel.</p><span class="saved">~2 hrs/week back</span></div>
+      <div class="card"><div class="n">AGENT 02</div><h3>The Signal Scout</h3><p>Scrapes the accounts you'd doomscroll, ranks every post against <i>your</i> goals, and hands you a 5-line digest instead of a feed.</p><span class="saved">~1.5 hrs/week back</span></div>
+      <div class="card"><div class="n">AGENT 03</div><h3>The Discussion Synthesizer</h3><p>Reads only the threads with real debate and writes the insight, the pushback, and the resolution — so you skip the noise.</p><span class="saved">~1 hr/week back</span></div>
+      <div class="card"><div class="n">AGENT 04</div><h3>The Draft Engine</h3><p>Turns each day's signals into thread outlines staged for you to approve or kill. You never start from a blank page again.</p><span class="saved">~1 hr/week back</span></div>
+      <div class="card"><div class="n">AGENT 05</div><h3>The Night Shift</h3><p>Schedules the other four, watches for <i>silent</i> failures, logs what actually shipped, and only pings you when a human is truly needed.</p><span class="saved">makes the other 4 trustworthy</span></div>
+      <div class="card full">
+        <div class="big">5+ hrs</div>
+        <div>
+          <h3 style="margin:0 0 6px">Every week. Compounding.</h3>
+          <p style="color:var(--ink-2);font-size:15px;margin-bottom:16px">None of this needs an ML degree — it needs engineering discipline pointed at your own goals. Get the full guide with the copy-able starter for each agent.</p>
+          <a class="btn btn-primary" href="#waitlist">Get the free guide →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section>
+  <div class="wrap">
+    <div class="offer">
+      <div>
+        <div class="kicker">The Sprint</div>
+        <h2>Your first 24/7 AI employee — built <i>with</i> you in 30 days.</h2>
+        <p class="lead">Done-with-you, not a course you'll never finish. We pick one task you most resent repeating, and by day 30 you have a real agent running it unattended — plus the patterns to build the next ten yourself.</p>
+        <div class="guarantee">
+          <div class="g-t">🛡️ The Ship-It Guarantee</div>
+          <p>A working agent live by day 30 — or I keep working with you 1:1 until it is. The risk is mine, not yours.</p>
+        </div>
+        <p class="price-note"><b>Founding cohort:</b> a small first group at founding-member pricing, locked in before public launch. Waitlist members get the first invitations.</p>
+      </div>
+      <div>
+        <ul class="stack">
+          <li><span class="ck">✓</span> <span><b>The Fleet Starter Kit</b> — scaffolding, schedulers, and the anti-babysitter patterns, ready to clone.</span></li>
+          <li><span class="ck">✓</span> <span><b>4 live builds with me</b> — we build your agents together, screen-to-screen, on your real workflow.</span></li>
+          <li><span class="ck">✓</span> <span><b>The "Steal My Agents" vault</b> — the actual agent files behind my fleet, yours to adapt.</span></li>
+          <li><span class="ck">✓</span> <span><b>The Anti-Babysitter Playbook</b> — monitoring, self-healing, and watchdogs so it survives without you.</span></li>
+          <li><span class="ck">✓</span> <span><b>1:1 build review</b> — I review your agent and unblock you personally.</span></li>
+          <li><span class="ck">✓</span> <span><b>The founding community</b> — the others building their fleet alongside you.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO FOR -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker">Honest fit check</div><h2>Who this is — and isn't — for</h2></div>
+    <div class="forwho">
+      <div class="pill good">
+        <h3>✅ This is for you if…</h3>
+        <ul>
+          <li>You have a demanding job and want to build on the side — without quitting or hiring</li>
+          <li>You're tired of AI that gives answers but never does the work</li>
+          <li>You can put in a few focused hours a week and want a system, not a demo</li>
+          <li>You'd rather own the patterns than rent another tool</li>
+        </ul>
+      </div>
+      <div class="pill bad">
+        <h3>🚫 This isn't for you if…</h3>
+        <ul>
+          <li>You want passive income with zero hands-on building</li>
+          <li>You want someone to build it <i>for</i> you and hand over a black box</li>
+          <li>You're chasing a get-rich-quick hack instead of a durable skill</li>
+          <li>You won't show up for the live builds</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="wrap">
+    <div class="box">
+      <div class="kicker">The founding cohort opens soon</div>
+      <h2>Build the employee<br>that works while you sleep.</h2>
+      <p>Join the waitlist to get the free 5-agent guide now and the first invitation when the founding cohort opens.</p>
+      <div class="capture" style="margin-top:30px">
+        <form id="wl-form-2" action="mailto:darylnunes@gmail.com" method="POST">
+          <input type="email" name="email" placeholder="you@work.com" required aria-label="Email address" />
+          <button class="btn btn-primary" type="submit">Join the founding waitlist</button>
+        </form>
+        <div class="ok-state" id="wl-ok-2">
+          <h3>You're in. ⚡</h3>
+          <p style="color:var(--ink-2);font-size:15px"><a href="guide.html" target="_blank" rel="noopener">Grab your free 5-agent guide →</a></p>
+        </div>
+        <p class="micro">Free guide on signup. No spam. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div>© <span id="yr">2026</span> The Solo AI Fleet Sprint — built by Daryl Nunes.</div>
+    <div style="display:flex;gap:18px">
+      <a href="https://x.com/nunes_daryl" data-x target="_blank" rel="noopener">X / Twitter</a>
+      <a href="#" data-li>LinkedIn</a>
+      <a href="#waitlist">Join the waitlist</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function wire(formId, okId){
+    var f=document.getElementById(formId), ok=document.getElementById(okId);
+    if(!f) return;
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var email=(new FormData(f)).get('email')||'';
+      var subj=encodeURIComponent('Solo AI Fleet Sprint — founding waitlist');
+      var body=encodeURIComponent('Add me to the founding waitlist. My email: '+email+'
+
+(And send me the free 5-agent guide, please!)');
+      window.location.href='mailto:darylnunes@gmail.com?subject='+subj+'&body='+body;
+      f.style.display='none'; ok.classList.add('show');
+    });
+  }
+  wire('wl-form','wl-ok'); wire('wl-form-2','wl-ok-2');
+  var yr=document.getElementById('yr'); if(yr) yr.textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
